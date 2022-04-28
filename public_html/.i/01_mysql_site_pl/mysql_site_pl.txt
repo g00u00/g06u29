@@ -1,0 +1,164 @@
+#!/usr/bin/perl -w
+use strict;
+use CGI::Carp qw (fatalsToBrowser);     # вывод ошибок к browser-у 
+use CGI;
+use DBI;
+
+
+
+print <<END_HTML; 	
+Content-type: text/html \n\n
+<head>
+<meta http-equiv='content-type' content='text/html'  charset='utf8'>
+END_HTML
+
+my $query = new CGI;
+my $control = $query->param("control") ;
+my $id = $query->param("id");
+
+print "\n<br>$control $id";
+
+my $host = "localhost"; 
+my $port = "3306"; 
+my $db = "notroot"; # имя базы данных -
+my $user = "notroot"; 
+my $pass = "notroot"; # пароль
+my $dbh = DBI->connect("DBI:mysql:$db:$host:$port",$user,$pass)|| die $DBI::errstr;#$dbh - дескриптор
+$dbh->do("SET NAMES 'utf8'");
+
+#------------------------------------------------------
+if ($control eq "from_db")
+	{
+	my $request = $dbh->prepare("
+	SELECT* FROM `mysql_site_pl_menu`
+	where id=$id
+	");    # - подготовка дескриптора выражения
+	$request->execute(); # - выполнение запроса
+	while (my $row_ref = $request->fetchrow_hashref()) # - ссылка на ассоциированный массив  
+		{
+		print "<title> $row_ref->{'head'} </title"; # - выбираемое поле
+		}
+
+	print "\n</head>";
+
+	print "\n\n<body>";
+
+	print "\n\n<table border=1  align='center'>";
+	print "\n\n<tr>";
+	print "\n\n<td height='200' valign='top'>";
+		my $request = $dbh->prepare("
+		SELECT* FROM `mysql_site_pl_menu`
+		");
+		$request->execute();
+		while (my $row_ref = $request->fetchrow_hashref()) 
+			{print "\n<br><a href=
+			'./mysql_site_pl.pl?
+				control=$control&id=$row_ref->{'id'}'>$row_ref->{'name'}</a>";
+			}
+	print "\n</td>";
+
+	print "\n\n<td valign='top'>";
+		my $request = $dbh->prepare("
+		SELECT* FROM `mysql_site_pl_pages`
+		where id_menu=$id
+		");
+		$request->execute();
+		while (my $row_ref = $request->fetchrow_hashref()) 
+			{print "\n<br><h4 align='center'> $row_ref->{'title'}</h4>";
+			 print "<p> $row_ref->{'body'}";
+			}
+	print "\n</td>";
+
+	print "\n</td>";
+
+	print "\n\n</tr>";
+	print "\n\n</table>";
+	}
+
+my $rc = $dbh->disconnect;  # соединение	
+print "\n</body>"; 
+print "\n</html>";
+ 
+=pod
+Подключение к базе данных с помощью функции connect
+Подготовка запроса к выполнению с помощью функции prepare
+Выполнение запроса с помощью функции execute
+Выборка данных (для запросов содержащих команду SQL select) с помощью функций fetch
+Завершение работы с базой данных -- функции finish и disconnect
+http://www.mysql.ru/docs/man/Perl_DBI_Class.html
+
+USE `notroot`;
+DROP TABLE IF EXISTS `mysql_site_pl_menu`;
+CREATE TABLE IF NOT EXISTS `mysql_site_pl_menu` (
+  `id` INT AUTO_INCREMENT  NOT NULL,
+  `name` varchar(512)  NULL,
+  `head` varchar(1024) NULL,
+   PRIMARY KEY (id)
+)
+DEFAULT CHARACTER SET = utf8,
+DEFAULT COLLATE = utf8_general_ci ;
+
+DESCRIBE `mysql_site_pl_menu`;
+
+DROP TABLE IF EXISTS `mysql_site_pl_pages`;
+CREATE TABLE IF NOT EXISTS `mysql_site_pl_pages` (
+  `id` int(11)  AUTO_INCREMENT,
+  `id_menu` int(11) ,
+  `url` varchar(512) ,
+  `title` varchar(512)  ,
+  `body` longtext  ,
+  PRIMARY KEY (`id`)
+)
+DEFAULT CHARACTER SET = utf8,
+DEFAULT COLLATE = utf8_general_ci ;
+;
+
+DESCRIBE `mysql_site_pl_pages`;
+
+
+INSERT INTO `mysql_site_pl_menu` ( `name`, `head`) VALUES
+('Название в навигации 1', 'Заголовок (title)  страницы 1');
+
+/*
+можно только суперпользователю
+SELECT id FROM `mysql_site_pl_menu`
+ORDER BY `id` DESC LIMIT 0,1
+INTO OUTFILE '/tmp/mysql_site_pl_menu.txt'
+;
+*/
+
+SELECT id FROM `mysql_site_pl_menu`
+ORDER BY `id` DESC LIMIT 0,1
+INTO @var_id_menu
+;
+select @var_id_menu;
+
+
+INSERT INTO `mysql_site_pl_pages` ( `id_menu`,  `title`, `body`) VALUES
+( @var_id_menu, 'Внутренний заголовок 1 страницы', 'Содержание 1 страницы');
+
+
+SELECT * FROM `mysql_site_pl_pages`
+ORDER BY `id` DESC LIMIT 0,1;
+
+DELETE FROM `mysql_site_pl_pages`
+WHERE `id_menu`=@var_id_menu;
+
+SELECT * FROM `mysql_site_pl_pages`
+ORDER BY `id` DESC LIMIT 0,1;
+
+cgi-bin/mysql_site_pl.pl?control=from_db&id=1
+
+=cut
+
+
+=pod
+Самостоятельно
+1. Создать новую страницу, содержащую ссылку из навигационного фрагмента
+2. Создать верхний и нижний блоки с загрузкой информации из базы данных
+3. Создать страницу, содержащуюю рисунок и описание этого рисунка и соответственно ссылку из навигации
+
+4. Написать фрагмент, обеспечивающий ввод данных в таблицы базы c использованием форм
+
+=cut
+

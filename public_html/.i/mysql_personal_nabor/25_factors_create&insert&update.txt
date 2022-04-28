@@ -1,0 +1,46 @@
+CREATE TABLE  `hr_factors` (
+`id` INT NULL  AUTO_INCREMENT ,
+`f_name` VARCHAR( 512 ) NULL ,
+`f_value` DECIMAL( 6, 3 ) NULL ,
+`f_norm` DECIMAL( 6, 3 ) ,
+PRIMARY KEY (`id`)
+) 
+CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+
+INSERT INTO  `hr_factors` (
+`id` ,
+`f_name` ,
+`f_value` ,
+`f_norm`
+)
+VALUES 
+('',  'age',  '20',  "");
+SELECT * FROM  hr_factors;
+
+
+INSERT INTO  `hr_factors` (
+`id` ,
+`f_name` ,
+`f_value` ,
+`f_norm`
+)
+VALUES 
+('',  'exp',  '50',  "");
+SELECT * FROM  hr_factors;
+
+
+
+
+
+
+select SUM(f_value) INTO @mysum
+from hr_factors;
+
+select @mysum
+from hr_factors;
+
+UPDATE `hr_factors`
+SET f_norm=(f_value/@mysum);
+
+SELECT * FROM  hr_factors;

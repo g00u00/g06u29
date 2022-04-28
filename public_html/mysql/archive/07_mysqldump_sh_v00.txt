@@ -1,0 +1,42 @@
+====================================
+—охранение и восстановление данных
+
+—оздание дампа одной базы
+mysqldump 'notroot'   -u'notroot' -p'notroot'> notroot.sql
+—оздать дамп всех баз пользовател¤
+mysqldump --all-databases   -u'notroot' -p'notroot'> all_notroot.sql
+
+
+”далить таблицу  и затем восстановить  из дампа
+mysql notroot  -u'notroot' -p'notroot' < notroot.sql
+
+
+
+======================
+SH
+======================
+—охранение и восстановление данных
+mysql -h [ip] -u [user] -p[pass] -e "[mysql commands]"
+mysql -h 192.168.1.10 -u root -pSeCrEt -e "show databases"
+
+
+
+-----------------------------------------
+mysql -u [user] -p[pass] -e "[mysql commands]"
+
+mysql -u [user] -p[pass] << EOF
+[mysql commands]
+EOF
+
+#!/bin/bash
+mysql -u root -pSeCrEt << EOF
+use mysql;
+show tables;
+EOF
+
+
+
+--------------------------------
+Mysql query resultset in bash script
+http://unix.stackexchange.com/questions/111545/mysql-query-resultset-in-bash-script
+

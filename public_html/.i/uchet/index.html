@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>формирование базы данных</title>
+  <meta http-equiv="Description" content="text/html; charset=windows-1251">
+</head>
+
+<html>
+
+
+<form  action="/cgi-bin/f_uchet.pl"   target='_blank' method='get'>
+
+<h3 align="center">Учет работ и использования материалов</h3>
+<table>
+<tr>
+	<td>Исполнитель:</td>
+	<td>
+	<select name='ispolnitel'>
+	<OPTION value=''></OPTION> \n
+	<OPTION value='Иванов Иван Иванович'>Иванов Иван Иванович</OPTION> \n
+	<OPTION value='Петров Семен Петрович'>Петров Семен Петрович</OPTION> \n
+	<OPTION value='Сидоров Петр Иванович'>Сидоров Петр Иванович</OPTION> \n
+	<OPTION value='Абрамов Иван Петрович'>Абрамов Иван Петрович</OPTION> \n
+	</SELECT>
+	</td>
+</tr>
+
+
+	<td>Название изделия:</td>
+	<td>
+	<select name='izdelie'>
+	<OPTION value=''></OPTION> \n
+	<OPTION value='Кашпо'>Кашпо</OPTION> \n
+	<OPTION value='Копилка'>Копилка</OPTION> \n
+	<OPTION value='Скульптура'>Скульптура</OPTION> \n
+	</SELECT></td>
+</tr>
+
+<tr>
+	<td>Операция или ресурсы:</td>
+	<td>
+	<select name='operazia'>
+	<OPTION value=''></OPTION> \n
+	<OPTION value='Формовка'>Формовка</OPTION> \n
+	<OPTION value='Шпатлевка'>Шпатлевка</OPTION> \n
+	<OPTION value='Грунтовка'>Грунтовка</OPTION> \n
+	<OPTION value='Окраска'>Окраска</OPTION> \n
+	<OPTION value='Упаковка'>Упаковка</OPTION> \n
+	<OPTION value='Формовочная смесь.Получение'>Формовочная смесь.Получение</OPTION> \n
+	</SELECT>
+	</td>
+</tr>
+<tr>
+
+<tr>
+	<td>Изготовлено (обработано): </td>
+	<td><input type="Text" name="izgotovleno" value="0" size=5></td>
+</tr>
+<tr>
+	<td>Получено расх.материалов: </td>
+	<td><input type="Text" name="polucheno" value="0" size=5></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+</tr>
+</table>
+
+
+<p><input type="Hidden" name="file"  value="uchet.txt" >
+<input type='Reset' value='Очистить форму' title=''>
+&nbsp;&nbsp;&nbsp;
+<input type=Submit name='submit' value="Отправить для обработки">
+</form>
+
+
+
+</html>

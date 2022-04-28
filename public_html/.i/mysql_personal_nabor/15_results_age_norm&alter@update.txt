@@ -1,0 +1,41 @@
+ALTER TABLE  `results` 
+ADD  `age` INT( 3 ) NOT NULL AFTER  `year_of_birth` ,
+ADD  `age_norm` DECIMAL( 6, 3 ) NOT NULL AFTER  `age`;
+SELECT * FROM `results`;
+
+
+UPDATE
+results
+SET results.age=YEAR(CURDATE())-YEAR(year_of_birth);
+SELECT * FROM `results`;
+
+
+UPDATE
+results
+SET results.age_norm=
+(CASE 
+WHEN age <= 25 THEN '40'
+WHEN age <= 35 THEN '80'
+WHEN age <= 45 THEN '100'
+WHEN age <= 55 THEN '80'
+WHEN age <= 65 THEN '60'
+WHEN age <= 75 THEN '40'
+WHEN age > 75 THEN '0'
+ELSE '0'
+END
+);
+
+
+
+select SUM(age_norm) INTO @t
+from results;
+
+select @t
+from results;
+
+UPDATE
+results
+SET age_norm=(age_norm/@t);
+
+select age_norm
+from results;

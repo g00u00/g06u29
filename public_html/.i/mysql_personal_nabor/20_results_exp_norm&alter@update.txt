@@ -1,0 +1,15 @@
+ALTER TABLE  `hr_results` 
+ADD  `exp_norm` DECIMAL( 6, 3 ) NULL AFTER  `experience`;
+SELECT * FROM `hr_results`; 
+
+
+UPDATE `hr_results`
+SET exp_norm=experience;
+SELECT * FROM `hr_results`; 
+
+select SUM(experience) INTO @mysum
+from `hr_results`;
+
+UPDATE `hr_results`
+SET exp_norm=(experience/@mysum);
+SELECT * FROM `hr_results`; 

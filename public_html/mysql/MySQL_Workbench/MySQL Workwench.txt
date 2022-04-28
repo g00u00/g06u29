@@ -1,0 +1,18 @@
+https://dev.mysql.com/downloads/installer/  - developer
+
+
+https://dev.mysql.com/doc/workbench/en/wb-requirements.html
+
+https://dev.mysql.com/doc/workbench/en/wb-installing.html
+https://dev.mysql.com/downloads/
+
+
+Возможно потребуется Visual C++ 2019. См:
+https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads
+https://support.microsoft.com/ru-ru/help/2977003/the-latest-supported-visual-c-downloads
+
+
+Enhanced entity-relationship (EER) diagrams
+https://cacoo.com/blog/er-diagrams-vs-eer-diagrams-whats-the-difference/
+
+https://habr.com/ru/post/175985/

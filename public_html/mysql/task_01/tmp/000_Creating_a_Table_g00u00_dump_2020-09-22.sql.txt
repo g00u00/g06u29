@@ -1,0 +1,187 @@
+-- MySQL dump 10.13  Distrib 5.5.53, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: 
+-- ------------------------------------------------------
+-- Server version	5.5.53-0ubuntu0.14.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `g06u29`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `g06u29` /*!40100 DEFAULT CHARACTER SET utf8 */;
+
+USE `g06u29`;
+
+--
+-- Table structure for table `06u29_staff`
+--
+
+DROP TABLE IF EXISTS `06u29_staff`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `06u29_staff` (
+  `id_staff` int(11) NOT NULL AUTO_INCREMENT,
+  `g06u29_fk_main` int(11) DEFAULT NULL,
+  `second_name` varchar(50) DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_staff`),
+  KEY `g06u29_fk_main` (`g06u29_fk_main`),
+  CONSTRAINT `06u29_staff_ibfk_1` FOREIGN KEY (`g06u29_fk_main`) REFERENCES `g06u29_main` (`id`) ON DELETE SET NULL ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `06u29_staff`
+--
+
+LOCK TABLES `06u29_staff` WRITE;
+/*!40000 ALTER TABLE `06u29_staff` DISABLE KEYS */;
+INSERT INTO `06u29_staff` VALUES (1,1,'Иванов','Иван'),(2,1,'Петров','Петр'),(3,2,'Сидоров','Николай');
+/*!40000 ALTER TABLE `06u29_staff` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `db_list`
+--
+
+DROP TABLE IF EXISTS `db_list`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `db_list` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `db_variable_1` varchar(255) NOT NULL,
+  `db_variable_2` decimal(10,0) NOT NULL,
+  `db_variable_3` decimal(10,0) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `db_list`
+--
+
+LOCK TABLES `db_list` WRITE;
+/*!40000 ALTER TABLE `db_list` DISABLE KEYS */;
+INSERT INTO `db_list` VALUES (1,'1',2,3),(2,'1',2,2),(3,'10',20,30),(4,'10',20,30);
+/*!40000 ALTER TABLE `db_list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `g06u29_main`
+--
+
+DROP TABLE IF EXISTS `g06u29_main`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `g06u29_main` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `species_manager` varchar(50) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `g06u29_main`
+--
+
+LOCK TABLES `g06u29_main` WRITE;
+/*!40000 ALTER TABLE `g06u29_main` DISABLE KEYS */;
+INSERT INTO `g06u29_main` VALUES (1,'cat_manager'),(2,'dog_manager'),(3,'all_manager');
+/*!40000 ALTER TABLE `g06u29_main` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `g06u29_pet`
+--
+
+DROP TABLE IF EXISTS `g06u29_pet`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `g06u29_pet` (
+  `id_pet` int(11) NOT NULL AUTO_INCREMENT,
+  `g06u29_fk_main` int(11) DEFAULT NULL,
+  `g06u29_name` varchar(20) NOT NULL DEFAULT '',
+  `g06u29_owner` enum('Harold','Gwen','Benny','Diane') DEFAULT NULL,
+  `g06u29_species` varchar(20) DEFAULT NULL,
+  `g06u29_sex` char(1) DEFAULT NULL,
+  `g06u29_color` char(1) DEFAULT NULL,
+  `g06u29_cost` decimal(10,2) DEFAULT '1000000.00',
+  `g06u29_birth` date DEFAULT NULL,
+  `g06u29_death` date DEFAULT NULL,
+  `g06u29_age` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_pet`),
+  KEY `g06u29_fk_main` (`g06u29_fk_main`),
+  CONSTRAINT `g06u29_pet_ibfk_1` FOREIGN KEY (`g06u29_fk_main`) REFERENCES `g06u29_main` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `g06u29_pet`
+--
+
+LOCK TABLES `g06u29_pet` WRITE;
+/*!40000 ALTER TABLE `g06u29_pet` DISABLE KEYS */;
+INSERT INTO `g06u29_pet` VALUES (1,1,'Fluffy','Harold','cat','f',NULL,87665.38,'1993-02-04',NULL,27),(2,1,'Claws','Gwen','cat','m',NULL,38255.80,'1994-03-17',NULL,26),(3,2,'Buffy','Harold','dog','f',NULL,28282.88,'1989-05-13',NULL,31),(4,2,'Fang','Benny','dog','m',NULL,26647.00,'1990-08-27',NULL,30),(5,2,'Bowser','Diane','dog','m',NULL,48386.34,'1979-08-31','1995-07-29',15),(6,NULL,'Chirpy','Gwen','bird','f',NULL,61990.72,'1998-09-11',NULL,22),(7,NULL,'Whistler','Gwen','bird',NULL,NULL,64794.58,'1997-12-09',NULL,22),(8,NULL,'Slim','Benny','snake','m',NULL,38000.75,'1996-04-29',NULL,24),(9,NULL,'Chirpy','Gwen','bird','f',NULL,95620.01,'1998-09-11',NULL,22),(10,NULL,'Whistler','Gwen','bird',NULL,NULL,64097.81,'1997-12-09',NULL,22),(11,NULL,'Slim','Benny','snake','m',NULL,33629.04,'1996-04-29',NULL,24);
+/*!40000 ALTER TABLE `g06u29_pet` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `view_name_owner`
+--
+
+DROP TABLE IF EXISTS `view_name_owner`;
+/*!50001 DROP VIEW IF EXISTS `view_name_owner`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `view_name_owner` (
+  `g06u29_name` tinyint NOT NULL,
+  `g06u29_owner` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Current Database: `g06u29`
+--
+
+USE `g06u29`;
+
+--
+-- Final view structure for view `view_name_owner`
+--
+
+/*!50001 DROP TABLE IF EXISTS `view_name_owner`*/;
+/*!50001 DROP VIEW IF EXISTS `view_name_owner`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`g06u29`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `view_name_owner` AS select `g06u29_pet`.`g06u29_name` AS `g06u29_name`,`g06u29_pet`.`g06u29_owner` AS `g06u29_owner` from `g06u29_pet` */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-09-22 20:27:17

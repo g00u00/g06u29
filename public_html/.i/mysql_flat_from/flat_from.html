@@ -1,0 +1,56 @@
+<html>
+<head>
+  <title>Запрос из базы</title>
+  <meta http-equiv="Description" content="text/html" charset="windows-1251">
+</head>
+<html>
+
+
+<form  action="../cgi-bin/mysql_flat_from.pl"   target='_self' method='get'>
+<h3 align="center">Запрос из базы (по городу и комнатам)</h3>
+<table>
+<tr>
+	<td>Город:</td>
+	<td>
+	<select name='gorod'>
+	<OPTION value=''></OPTION> \n
+	<OPTION value='Москва'>Москва</OPTION> \n
+	<OPTION value='Нижний Новгоров'>Нижний Новгоров</OPTION> \n
+	<OPTION value='Дзержинс'>Дзержинс</OPTION> \n
+	<OPTION value='Семенов'>Семенов</OPTION> \n
+	<OPTION value='Лондон'>Лондон</OPTION> \n
+	<OPTION value='Париж'>Париж</OPTION> \n
+	</SELECT>
+	</td>
+</tr>
+
+<tr>
+	<td>Комнат:</td>
+	<td>
+	<select name='komnat'>
+	<OPTION value=''></OPTION> \n
+	<OPTION value='1'>1</OPTION> \n
+	<OPTION value='2'>2</OPTION> \n
+	<OPTION value='3'>3</OPTION> \n
+	<OPTION value='4'>4</OPTION> \n
+	</SELECT>
+	</td>
+</tr>
+
+<tr>
+	<td>Площадь</td>
+	<td><input type="Text" name="plochad" value="0" size=5></td>
+</tr>
+<tr>
+
+<tr>
+	<td>Цена</td>
+	<td><input type="Text" name="zena" value="0" size=5></td>
+</tr>
+<tr>
+</table>
+<input type='Reset' value='Очистить форму' title=''>
+&nbsp;
+<input type=Submit name='submit' value="Отправить для обработки">
+</form>
+</html>

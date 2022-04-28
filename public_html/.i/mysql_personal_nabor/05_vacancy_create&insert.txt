@@ -1,0 +1,38 @@
+USE personal_nabor;
+-----------------
+-----------------
+CREATE TABLE IF  NOT EXISTS  `vacancy` (
+`id` INT NOT NULL AUTO_INCREMENT,
+`division` VARCHAR( 512 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
+`vacancy` VARCHAR( 512 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
+`description` VARCHAR( 512 ) NOT NULL ,
+`min_salary` INT,
+`max_salary` INT,
+`place` VARCHAR( 512 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
+`activity` INT NOT NULL DEFAULT '1',
+`int2` INT NOT NULL ,
+`int3` INT NOT NULL ,
+FULLTEXT (`description`),
+PRIMARY KEY ( `id` )
+) 
+#ENGINE=INNODB CHARACTER SET cp1251 COLLATE cp1251_general_ci; 
+ENGINE=MyISAM  CHARACTER SET cp1251 COLLATE cp1251_general_ci;
+-------------------------------------
+INSERT INTO `vacancy` (
+`id` ,
+`division` ,
+`vacancy` ,
+`description` ,
+`min_salary` ,
+`max_salary` ,
+`place` ,
+`activity` ,
+`int2` ,
+`int3` 
+)
+VALUES 
+('', 'Кафедра информационных систем и технологий', 'Профессор', 'Должностные обязанности', '20000', '25000', 'Нижний Новгород, Нижегородский  район', '1', '', ''),
+('', 'Кафедра информационных систем и технологий', 'Доцент', 'Должностные обязанности', '15000', '20000', 'Нижний Новгород, Московский район  район', '1', '', ''),
+('', 'Кафедра информационных систем и технологий', 'Преподаватель', 'Должностные обязанности', '10000', '15000', 'Нижний Новгород, Автозаводский район', '1', '', '');
+
+------------------------------

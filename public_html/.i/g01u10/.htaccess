@@ -1,0 +1,11 @@
+DefaultLanguage ru
+AddDefaultCharset utf-8
+Options +Indexes
+DirectoryIndex public_html/index.php
+AuthUserFile /var/www/marshirov/etc/.htpasswd
+AuthType Basic
+AuthName "notroot"
+Require valid-user
+#htpasswd -c .htpasswd notroot
+#/var/www/etc/.htpasswd
+

@@ -1,0 +1,271 @@
+#!/usr/bin/perl -w
+use CGI::Carp qw (fatalsToBrowser);     # вывод ошибок к browser-у 
+use CGI;
+use DBI;
+
+$remote_address = $ENV{ "REMOTE_ADDR" };
+$query_str = $ENV{'QUERY_STRING'}; 
+
+print <<END_HTML; 	
+Content-type: text/html \n\n
+<head>
+<meta http-equiv='content-type' content='text/html'  charset='utf8'>
+<title>Оформление ...</title>
+</head>
+<body>
+END_HTML
+
+my $query = new CGI;
+my $control = $query->param("control") ;  $control  =~ tr/+/ /;
+my $cond_1 = $query->param("cond_1") ;  $cond_1  =~ tr/+/ /;
+my $cond_2 = $query->param("cond_2") ;  $cond_2  =~ tr/+/ /;
+
+my $host = "localhost"; 
+my $port = "3306"; 
+my $db = "notroot"; # имя базы данных -
+my $user = "notroot"; 
+my $pass = "notroot"; # пароль
+my $dbh = DBI->connect("DBI:mysql:$db:$host:$port",$user,$pass)|| die $DBI::errstr;
+$dbh->do("SET NAMES 'utf8'");
+
+#------------------------------------------------------
+if ($control eq "for_manager") {for_manager($control, $cond_1, $cond_2);}
+if ($control eq "to_db") {to_db ($control, $cond_1, $cond_2);}
+#------------------------------------------------------
+my $rc = $dbh->disconnect;  # соединение	
+print "\n</body>"; 
+print "\n</html>";
+
+#-------------------------------------------------------------------------
+sub for_manager($control,$cond_1, $cond_2,)
+{
+print <<END_HTML; 
+<form  action="./accounting.pl"   target='_self' method='get'>
+<table  cellpadding=15 cellspacing=1 border=1>
+END_HTML
+print "<input type='Hidden' name='control' value='to_db'>";
+print "<input type='Hidden' name='cond_1' value=''>";
+print "<input type='Hidden' name='cond_2' value=''>";
+
+#--Формулируем задачу
+print "\n<td valign='top'>";
+print "<br>Название задачи <input type='Text' name='task_name' value=''  size=50 > ";
+
+#--считывем и выводим атрибуты материальных и трудовых ресурсов
+print "\n<td valign='top'>";
+$sql="
+SELECT * FROM `accounting_resources`
+;
+";
+my $result = $dbh->prepare($sql); $result->execute();
+$i_td=0;
+while (my $row = $result->fetchrow_hashref()) 
+{
+my $resource_id=$row->{'resource_id'};
+my $resource_name=$row->{'resource_name'};
+my $resource_type=$row->{'resource_type'};
+my $resource_units_of_measurement=$row->{'resource_units_of_measurement'};
+my $resource_price=$row->{'resource_price'};
+print "<br>$resource_name; $resource_type;  $resource_units_of_measurement;$resource_price";
+print "
+<input type='Radio' name='resource_id' value='$resource_id'>
+";
+}
+
+#--назначаем необходимое количество ресурсов
+print "\n<td valign='top'>";
+print "<br>Количество ресурсов <input type='Text' name='resource_amount_for_task' value=''  size=4 > ";
+print "<br>Длительность (только для трудовых), час <input type='Text' name='task_duration' value=''  size=4 > ";
+
+
+#--считывем и выбираем человеческие ресурсы
+print "\n<td valign='top'>";
+$sql="
+SELECT * FROM `accounting_personal`
+;
+";
+my $result = $dbh->prepare($sql); $result->execute();
+$i_td=0;
+while (my $row = $result->fetchrow_hashref()) 
+{
+my $personal_id=$row->{'personal_id'};
+my $personal_fio=$row->{'personal_fio'};
+print "<br>", $personal_fio;
+print "
+<input type='Radio' name='personal_id' value='$personal_id'>
+";
+}
+print "\n</table>";
+
+
+print <<END_HTML; 
+<p>
+<input type='Reset'  name='reset' value='Очистить'>
+<input type='Submit' name='submit' value='Отправить'>
+</p>
+END_HTML
+
+return
+}
+
+
+
+
+sub to_db ($control, $cond_1, $cond_2)
+{
+
+my $query = new CGI;
+my $control = $query->param("control") ;  $control  =~ tr/+/ /;
+my $cond_1 = $query->param("cond_1") ;  $cond_1  =~ tr/+/ /;
+my $cond_2 = $query->param("cond_2") ;  $cond_2  =~ tr/+/ /;
+my $task_name = $query->param("task_name") ;  $task_name  =~ tr/+/ /;
+my $task_type = $query->param("task_type") ;  $task_type  =~ tr/+/ /;
+my $task_data = $query->param("task_data") ;  $task_data  =~ tr/+/ /;
+my $task_duration = $query->param("task_duration") ;  $task_duration  =~ tr/+/ /;
+my $resource_amount_for_task = $query->param("resource_amount_for_task") ;  $resource_amount_for_task  =~ tr/+/ /;
+my $resource_id = $query->param("resource_id") ;  $resource_id  =~ tr/+/ /;
+my $personal_id = $query->param("personal_id") ;  $personal_id  =~ tr/+/ /;
+print $remote_address, $query_str;
+print "\n<br>--", $control,$cond_1, $cond_2, $task_name, $task_duration, $resource_amount_for_task, $personal_id, $resource_id;
+
+$cond_1="accounting_aggregated";
+$sql=join('',"
+CREATE TABLE IF NOT EXISTS   `accounting_aggregated` (
+`task_id` INT  AUTO_INCREMENT PRIMARY KEY,
+`task_name` VARCHAR( 128 ) NOT NULL ,
+`task_duration` DECIMAL NOT NULL ,
+`resource_amount_for_task` DECIMAL NOT NULL ,
+`task_cost` DECIMAL NOT NULL ,
+`resource_id` INT,
+`resource_name` VARCHAR( 128 ) NOT NULL ,
+`resource_type` VARCHAR( 16 ) NOT NULL ,
+`resource_units_of_measurement` VARCHAR( 16 ) NOT NULL,
+`resource_price` DECIMAL NOT NULL ,
+`personal_id` INT,
+`personal_fio` VARCHAR( 128 ) NOT NULL ,
+`task_date` DATE, 
+`task_time` TIME 
+)COLLATE utf8_general_ci;
+");
+my $result = $dbh->prepare($sql);  $result->execute();
+
+#-выборка выбранного ресурса из таблицы ресурсов 
+$sql="
+	select * from `accounting_resources`
+	WHERE `resource_id`='$resource_id'
+	;
+";
+my $result=$dbh->prepare($sql);$result->execute();
+while (my $row = $result -> fetchrow_hashref())  
+	{
+	$resource_name = $row->{'resource_name'};
+	$resource_type = $row->{'resource_type'};
+	$resource_units_of_measurement = $row->{'resource_units_of_measurement'};
+	$resource_price = $row->{'resource_price'};
+	}
+#print "\n<br>--", $resource_id, $resource_name, $resource_type, $resource_units_of_measurement, $resource_price;
+
+#-выборка выбранного сотрудника из таблицы сотрудников 
+$sql="
+	select * from `accounting_personal`
+	WHERE `personal_id`='$personal_id'
+	;
+";
+my $result=$dbh->prepare($sql);$result->execute();
+while (my $row = $result -> fetchrow_hashref())  
+	{
+	$personal_id = $row->{'personal_id'};	
+	$personal_fio = $row->{'personal_fio'};
+	}
+#print "\n<br>--", $personal_id, $personal_fio;
+	
+#-расчет стоимости выполнения задачи 
+if ($resource_type eq "материальный"){$task_cost=$resource_price*$resource_amount_for_task;}
+if ($resource_type eq "трудовой"){$task_cost=$resource_price*$resource_amount_for_task*$task_duration;}
+
+#-запись в агрегированную таблицу
+$cond_1="accounting_aggregated";
+$sql=join('',
+	"INSERT INTO  `",$cond_1,"` 
+	(`task_id` ,`task_name` ,`task_duration`, `resource_amount_for_task`, `task_cost`,  `resource_id`, `resource_name`, `resource_type`, `resource_units_of_measurement`, `resource_price`,`personal_id`, `personal_fio`, `task_date`, `task_time`)
+	VALUES 
+	(NULL,'$task_name' ,'$task_duration', '$resource_amount_for_task', '$task_cost',  '$resource_id', '$resource_name', '$resource_type', '$resource_units_of_measurement', '$resource_price', '$personal_id', '$personal_fio', CURDATE( ) , CURTIME( ));
+	");		
+$dbh->do($sql);
+	
+print "\<br>В таблицу $cond_1 записано ..";	
+$sql=join('',"select * from `",$cond_1,"` ORDER BY `task_id` DESC 
+LIMIT 1");
+my $result = $dbh->prepare($sql);  $result->execute();
+while (my @row = $result -> fetchrow_array())  {print "\n<br>@row";}
+return
+}
+
+
+=pod
+
+
+CREATE TABLE  `accounting_resources` (
+`resource_id` INT AUTO_INCREMENT PRIMARY KEY ,
+`resource_name` VARCHAR( 128 ) NOT NULL ,
+`resource_type` VARCHAR( 16 ) NOT NULL ,
+`resource_units_of_measurement` VARCHAR( 16 ) NOT NULL ,
+`resource_price` DECIMAL NOT NULL ,
+`resource_date` DATE, 
+`resource_time` TIME 
+)COLLATE utf8_general_ci;
+
+INSERT INTO `accounting_resources` (
+`resource_id` ,
+`resource_name` ,
+`resource_type` ,
+`resource_units_of_measurement` ,
+`resource_price` ,
+`resource_date` ,
+`resource_time`
+)
+VALUES (
+NULL , 'менеджер', 'трудовой', 'р./час', '200', CURDATE( ) , CURTIME( )
+);
+
+
+
+CREATE TABLE  `accounting_personal` (
+`personal_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`personal_fio` VARCHAR( 128 ) NOT NULL
+) COLLATE utf8_general_ci;
+
+INSERT INTO `accounting_personal` (
+`personal_id` ,
+`personal_fio`
+)
+VALUES (
+NULL , 'Сидоров Иван Петрович'
+);
+
+
+
+SELECT `personal_fio`, SUM(task_cost) FROM `accounting_aggregated` 
+GROUP BY `personal_fio`
+
+
+SELECT `task_name`, SUM(task_cost) FROM `accounting_aggregated` 
+GROUP BY `task_name`
+
+SELECT  SUM(task_cost) FROM `accounting_aggregated` 
+
+
+
+=cut
+=pod
+Разработать среду управленчесого учета человеческих ресурсов содержащую
+- ФИО и др. личностные атрибуты ресурсов
+- инормация о возможных стоимостных показателях ресурсов с их разделением на материальные и трудовые
+- сводную таблицу, позволяющую определять
+  финансовые и временные затраты по ресурсам и персоналу в целом за любой указанный промежутом времени
+  финансовые и временные затраты по отфильтрованным и отсортированным ресурсам и персоналу в целом и за любой указанный промежутом времени
+
+Дополнить среду возможностью мотивации по ежедневной и ежемесячной заработной плате  
+=cut
+
+#../cgi-bin/mysql/accounting.pl?control=for_manager

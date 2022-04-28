@@ -1,0 +1,93 @@
+SELECT user,password FROM mysql.user;
+SELECT user,password FROM mysql.user\G
+
+\c -
+help
+
+Использовать текстовый файл
+--
+#
+/*
+*/
+
+`` - обратный апостроф
+
+модификаторы и квалификаторы
+
+03 - 43:52
+CREATE 
+характеристика таблицы  
+
+====================
+03 - 1.20
+
+show databases;
+use information_schema;
+show tables;
+select * from information_schema.schemata limit 5
+select * from information_schema.tables limit 5
+select TABLE_NAME, TABLE_COMMENT from information_schema.tables limit 5
+------------
+
+select table_schema, table_name, column_name,  data_type  
+from information_schema.columns
+where table_schema ='notroot'
+AND ((table_name='students' )OR (table_name='page_1')) 
+? OR
+;
+
+
+select * from information_schema.schemata\G;
+select * from schemata\G;
+
+select * from schemata\G;
+
+select * 
+from information_schema.schemata
+where SCHEMA_NAME='notroot'
+\G;
+
+
+
+ ==================================
+ 1:23:29
+ Индексы и ограничения
+ Попытка уйти от перебора 
+ CREATE INDEX ixName on table2(name)
+ 
+  primery key - и по нему строится первичная запись - запись будет дергаться по этому полю из справочника
+  
+  CONSTRAINT pkId PRIMERY KEY (id)
+ 
+ prinery & unique -  индексируются автоматически
+ ----------------
+ CREATE TABLE IF NOT EXISTS `parent22` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE =utf8_general_ci ;
+ 
+ INSERT INTO `parent` (`id`) VALUES(1);
+ INSERT INTO `parent` (`id`) VALUES(2);
+ 
+ 
+ CREATE TABLE IF NOT EXISTS  `child` (
+ `id` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+ `parent_id` INT( 11 ) NOT NULL ,
+PRIMARY KEY (  `id` ) , /*индексировать руками*/
+FOREIGN KEY ( parent_id ) REFERENCES parent(  `id` )
+ON DELETE CASCADE
+) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE =utf8_general_ci ;
+----------------
+ 
+ 
+ 04.flv
+ ======================
+ манипулирование данными
+ insert
+ load data infile 
+ update
+ delete
+ 0:23:00
+ 
+ 
+ 

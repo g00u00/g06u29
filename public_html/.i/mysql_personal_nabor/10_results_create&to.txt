@@ -1,0 +1,26 @@
+CREATE TABLE `results` (
+`id` int( 10 ) unsigned NOT NULL AUTO_INCREMENT ,
+`id_vacancy` int( 10 ) unsigned default NULL ,
+`vacancy` varchar( 512 ) NOT NULL ,
+`fio` varchar( 512 ) NOT NULL ,
+`year_of_birth` date NOT NULL ,
+`sex` enum( 'ì', 'æ' ) default NULL ,
+`education` varchar( 512 ) default NULL ,
+`experience` varchar( 512 ) default NULL ,
+`additional_information` varchar( 512 ) default NULL ,
+`phone` varchar( 512 ) default NULL ,
+`date` date default NULL ,
+`time` time default NULL ,
+PRIMARY KEY ( `id` ) 
+) ENGINE = MYISAM DEFAULT CHARSET = cp1251;
+--------------------------------------------------
+----------------------------------------------------
+
+INSERT INTO `results` 
+SELECT * 
+FROM `pervichka`
+WHERE id_vacancy="1" ;
+SELECT * FROM `results`;
+
+
+

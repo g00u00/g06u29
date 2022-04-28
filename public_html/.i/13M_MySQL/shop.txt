@@ -1,0 +1,73 @@
+CREATE TABLE IF NOT EXISTS `shop` 
+(
+  `name` varchar(25) DEFAULT NULL,
+  `quantity` Int DEFAULT NULL,
+  `purchase_price` Float(7,2) DEFAULT NULL,
+  `date_of_delivery` date DEFAULT NULL,
+  `selling_price` Float(7,2) DEFAULT NULL,
+  `date_of_sell` date DEFAULT NULL
+) ;
+
+SHOW TABLES;
+
+DESCRIBE shop;
+
+INSERT INTO `shop` (`name`, `quantity`, `purchase_price`, `date_of_delivery`, `selling_price`, `date_of_sell`) VALUES
+('Bag', '5', '100', '2015-06-10', '115', NULL),
+('T-shirt', '10', '70', '2015-05-22', '88', NULL),
+('Dress', '1', '90', '2015-06-13', '100', '2015-06-15'),
+('Hat', '2', '50', '2015-06-02', '60', '2015-06-12'),
+('Skirt', '4', '65', '2015-04-25', '75', '2015-05-29'),
+('Trousers', '3', '95', '2015-05-15', '110', NULL),
+('Jeans', '7', '60', NULL, '70', NULL),
+('Blazer', '3', '75', '2015-06-01', '90', '2015-06-10'),
+('Leggins', '6', '55', '2015-05-28', '63', '2015-06-05'),
+('Jumpsuits', '2', '120', NULL, '140', NULL),
+('Top', '7', '69', '2015-06-03', '75', '2015-06-14');
+
+
+ALTER TABLE `shop`
+ADD COLUMN `id` INT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+SELECT * FROM `shop`;
+
+SELECT * FROM `shop` WHERE name='Top';
+
+SELECT * FROM `shop` WHERE purchase_price='100';
+
+SELECT * FROM `shop` WHERE quantity='5' and selling_price='115';
+
+SELECT name, selling_price  FROM shop ORDER BY selling_price;
+
+
+SELECT name, purchase_price, date_of_delivery FROM shop ORDER BY purchase_price, date_of_delivery DESC;
+
+select name, date_of_delivery, curdate(), timestampdiff(day,date_of_delivery,curdate()) as duration from shop;
+
+select name, date_of_delivery, date_of_sell, timestampdiff(day,date_of_delivery,date_of_sell) as duration_until_sold from shop;
+
+
+select name, date_of_delivery, date_of_sell, timestampdiff(day,date_of_delivery,date_of_sell) as duration_until_sold from shop order by duration_until_sold;
+
+select name, date_of_delivery, date_of_sell, timestampdiff(day,date_of_delivery,date_of_sell) as duration_until_sold from shop WHERE date_of_sell IS NOT NULL order by duration_until_sold;
+
+select count(*) from shop;
+
+select purchase_price, count(*) from shop group by purchase_price;
+
+select quantity, selling_price, (quantity*selling_price) as proceeds from shop;
+
+
+select quantity, selling_price, (quantity*selling_price-purchase_price*quantity) as profits from shop;
+
+
+select sum(quantity*selling_price-purchase_price*quantity) from shop;
+
+
+select sum(quantity*selling_price-purchase_price*quantity) as overall_profit from shop;
+
+
+select sum(quantity*selling_price-purchase_price*quantity) from shop where MONTH(date_of_sell)=06;
+
+
+select sum(quantity*selling_price-purchase_price*quantity) as profit_for_June from shop where MONTH(date_of_sell)=06;

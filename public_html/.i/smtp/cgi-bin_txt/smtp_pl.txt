@@ -1,0 +1,103 @@
+#!/usr/bin/perl -w 
+# use strict;              # спасает от глупых ошибок
+use CGI::Carp qw (fatalsToBrowser);     # вывод ошибок к browser-у 
+use DBI;
+use Net::SMTP; 
+
+
+#@m_dir=200;
+
+print "Content-type: text/html \n\n";
+print "<html>";
+print "<head>";
+print "<meta http-equiv='content-type' content='text/html'  charset='windows-1251'>";
+print "<title>Выполнение почтовых рассылок</title>";
+print "</head>";
+print "<body>";
+
+
+
+
+
+my $host = "mysql.1.metro07.z8.ru"; 
+my $port = "3306"; 
+my $db = "db_metro07_2"; # имя базы данных -
+my $user = "dbu_metro07_2"; 
+my $pass = "e*"; # пароль
+$dbh = DBI->connect("DBI:mysql:$db:$host:$port",$user,$pass)|| die $DBI::errstr;
+
+my $result = $dbh->prepare("
+SELECT `name`,`email`
+FROM `smtp`
+");
+#  и выполняем его
+$result->execute();
+# разбираем результат
+# результат помещается в хэш,
+# печатаем элементы поименно
+while (my $ln = $result->fetchrow_hashref()) 
+	{
+	print  " <br>$ln->{'name'}	$ln->{'email'} \n";
+	
+	
+		$subject = $ln->{'name'};
+#		my $subject=join('',$subject,' Новый Год 2011. Символ года, Копилки, Зоокашпо, Новогодние фигуры оптом от производителя');	
+		my $subject='ООО Компания Метро. Дополнительная скидка  в 10%  на период до 31.12.2010';	
+		
+		
+		my $to = $ln->{'email'};
+		my $server = 'smtp.peterhost.ru';
+	#	my $to = 'marshirov@gmail.com';
+	#	my $subject = 'Подарки и сувениры Новогоднего ассортимента оптом';
+		my $from = 'anna@*.ru';
+		my $login='metro07_5';
+		my $pass='q*';
+		#пассы и логины левые
+		$smtp = Net::SMTP->new($server, Debug => 1);
+		$smtp->auth($login,$pass);
+
+
+
+		$smtp->mail($from);
+		$smtp->to($to);
+
+		$smtp->data();
+
+
+		$smtp->datasend("Content-Type: text/html; charset=windows-1251\n");
+		#$smtp->datasend("Content-Transfer-Encoding: 7bit\n");
+		$smtp->datasend("To: $to \n");
+
+		$smtp->datasend("From: $from \n");
+		$smtp->datasend("Reply-To: $from \n");
+
+		$smtp->datasend("Subject: $subject \n");
+		$smtp->datasend("\n");
+	
+	
+#$file_menu = "../public_html/m_general/smtp/ind.txt";
+$file_menu = "../public_html/site_market/clients/index.html";
+open (DFILE_M,$file_menu) or die "mistake-$file_menu";
+while ($pri=<DFILE_M>)
+{print ;
+$smtp->datasend("$pri \n" );
+  }
+close(DFILE_M);
+		
+		
+		$smtp->dataend();
+		$smtp->quit;
+
+	
+
+	
+	}
+
+
+
+#$rc = $sth->finish;    # закрываем
+$rc = $dbh->disconnect;  # соединение
+
+print "<br> Готово";
+print "<body>";
+print "<html>";

@@ -1,0 +1,24 @@
+<p><b>Фрагмент формы</b></p>
+<form  action="/cgi-bin/mysql_store_customer.pl"   target='_blank' method='get'>
+<input type="Hidden" name="ip" value="192" >
+
+<p>Координаты заказчика:
+
+Фамилия: <input type="Text" name="last_name" value="Ivanov"   size=20 >
+Имя: <input type="Text"  name="first_name" value=""    size=10 >
+Телефон:<input type="Text"  name="phone" value=""    size=10 >
+</p>
+
+<p>Пожелание клиента::  
+<br><TEXTAREA name="info" rows=3 cols=12></TEXTAREA>
+</p>
+<p>
+<input type="Hidden" name="control" value="to_table" >
+<input type="Hidden" name="control" value="only_print_ok">
+</p>
+<p>
+<input type="Reset"  name="reset" value="Обнулить">
+<input type="Submit" name="submit" value="Оправить">
+</p>
+</form>
+</html> 

@@ -1,0 +1,40 @@
+CREATE TABLE  IF  NOT EXISTS  `pervichka` (
+`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
+`id_vacancy` INT UNSIGNED,
+`vacancy` VARCHAR( 512 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
+`fio` VARCHAR( 512 ) CHARACTER SET cp1251 COLLATE cp1251_general_ci NOT NULL ,
+`year_of_birth` DATE NOT NULL ,
+`sex`  ENUM('м', 'ж') ,
+`education`  VARCHAR( 512 ),
+`experience` VARCHAR( 512 ),
+`additional_information` VARCHAR( 512 ),
+`phone` VARCHAR( 512 ),
+`date` DATE, 
+`time` TIME, 
+PRIMARY KEY ( `id` )
+) 
+#ENGINE=INNODB CHARACTER SET cp1251 COLLATE cp1251_general_ci; 
+ENGINE=MyISAM  CHARACTER SET cp1251 COLLATE cp1251_general_ci;
+-------------------------------
+INSERT INTO `pervichka` (
+`id` ,
+`id_vacancy`, 
+`vacancy`,
+`fio` ,
+`year_of_birth` ,
+`sex` ,
+`education`, 
+`experience`,
+`additional_information`,
+`phone`,
+`date`, 
+`time` 
+)
+VALUES 
+(NULL ,'1','Профессор','Иванов','1955-02-10','м','высшее','30','Дополнительная информация','+7910910910',CURDATE(),CURTIME()),
+(NULL ,'1','Профессор','Петров','1965-02-10','м','высшее','25','нет','+7910910910',CURDATE(),CURTIME()),
+(NULL ,'1','Профессор','Сидоров','1970-02-10','м','высшее','5','нет','+7910910910',CURDATE(),CURTIME());
+-----------------
+
+
+

@@ -1,0 +1,5 @@
+cd extplorer-data/sh
+tar -cpjf my_archive.bz2 ../../public_html ../../cgi-bin
+mysqldump g01u00 -u'g01u00' -p'g01u00'> ../../pulic_html/g01u00.sql
+mysqldump g01u01 -u'g01u00' -p'g01u00'> g01u01.sql
+ls -la

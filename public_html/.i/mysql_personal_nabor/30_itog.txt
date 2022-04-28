@@ -1,0 +1,29 @@
+ALTER TABLE  `hr_results` ADD  `itog` DECIMAL(5,3) NULL ;
+
+
+SELECT SUM(f_norm) INTO @age_norm
+FROM hr_factors
+WHERE `hr_factors`.`f_name`="age";
+SELECT @age_norm FROM `hr_results`;
+
+
+SELECT SUM(f_norm) INTO @exp_norm
+FROM `hr_factors`
+WHERE `hr_factors`.`f_name`="exp";
+SELECT @exp_norm FROM `hr_results`;
+
+
+
+UPDATE `hr_results`
+SET itog=(age_norm*@age_norm + exp_norm*@exp_norm);
+SELECT * FROM `hr_results`;
+
+
+SELECT SUM(itog)
+FROM `hr_results`;
+
+SELECT `fio`,`itog`
+FROM `hr_results`;
+
+
+SELECT * FROM results;

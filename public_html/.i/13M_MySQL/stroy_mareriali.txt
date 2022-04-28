@@ -1,0 +1,42 @@
+DROP TABLE IF EXISTS `Production of construction materials`;
+
+CREATE TABLE IF NOT EXISTS `Production of construction materials` 
+(
+  `Id` int DEFAULT NULL,
+  `Actions` varchar(20) DEFAULT NULL,
+  `Date` date DEFAULT NULL,
+  `Purchase price` int DEFAULT NULL,
+  `Quantity` int DEFAULT NULL,
+  `Duration (month)` int DEFAULT NULL,
+  `Seling price` int DEFAULT NULL,
+  `Quantity of blocks` int DEFAULT NULL
+) ;
+
+INSERT INTO `Production of construction materials` (`Id`, `Actions`, `Date`, `Purchase price`, `Quantity`, `Duration (month)`, `Seling price`, `Quantity of blocks`) VALUES
+('01', 'Purchase of cement', '2015-06-17', '1000', '1900', NULL, NULL, NULL),
+('02', 'Purchase of sand', '2015-06-15', '700', '9200', NULL, NULL, NULL),
+('03', 'Purchase of filler', '2015-06-10', '1100', '11000', NULL, NULL, NULL),
+('04', 'Purchase of water', '2015-06-13', '500', '1300', NULL, NULL, NULL),
+('05', 'Purchase vibropress', '2015-05-10', '900000', '2', NULL, NULL, NULL),
+('06', 'Purchase mixer', '2015-05-15', '150000', '2', NULL, NULL, NULL),
+('07', 'Purchase conveyor', '2015-05-23', '90000', '2', NULL, NULL, NULL),
+('08', 'Purchase of truck', '2015-05-27', '250000', '4', NULL, NULL, NULL),
+('09', 'Paying rent', '2015-04-30', '50000', NULL, 6, NULL, NULL),
+('10', 'Paying for workers', '2015-06-30', '30000', '10', NULL, NULL, NULL),
+('11', 'Shipping unit', '2015-06-25', NULL, NULL, NULL, '60', '78000');
+
+select * from `Production of construction materials`;
+
+SELECT `Id`, `Actions`, `Purchase price`, Quantity, `Duration (month)`,(`Purchase price`*IFNULL(Quantity,0) +`Purchase price`*IFNULL(`Duration (month)`,0)) AS Costs FROM `Production of construction materials`;
+
+SELECT `Id`, `Actions`, `Seling price`, `Quantity of blocks`,(`Seling price`*`Quantity of blocks`) AS Reveneu FROM `Production of construction materials`;
+
+SELECT sum(`Purchase price`*IFNULL(Quantity,0) +`Purchase price`*IFNULL(`Duration (month)`,0)) AS Costs FROM `Production of construction materials`;
+
+select @Total_Costs:=sum(`Purchase price`*IFNULL(Quantity,0) +`Purchase price`*IFNULL(`Duration (month)`,0)) AS Costs FROM `Production of construction materials`;
+
+SELECT sum(ifnull(`Seling price`*`Quantity of blocks`,0)) AS Reveneu FROM `Production of construction materials`;
+
+SELECT @Total_Reveneu:=sum(ifnull(`Seling price`*`Quantity of blocks`,0)) AS Reveneu FROM `Production of construction materials`;
+
+select @Total_Reveneu-@Total_Costs as Profit;

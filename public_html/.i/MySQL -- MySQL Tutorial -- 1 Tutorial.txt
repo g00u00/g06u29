@@ -1,0 +1,2 @@
+[InternetShortcut]
+URL=https://dev.mysql.com/doc/mysql-tutorial-excerpt/5.6/en/tutorial.html

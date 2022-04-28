@@ -1,0 +1,135 @@
+========================================================
+Создание пользователя, базы и связь пользователя с базой
+
+mysql -u'notroot' -p'notroot'
+SET PASSWORD =PASSWORD('new_passwd');
+SELECT user,host,password FROM mysql.user;
+
+================================
+Начало работы
+
+SHOW DATABASES;
+USE notroot;
+SHOW TABLES;
+DESCRIBE table;
+
+=========================================
+Создание и модифицирование  простейших таблиц
+
+Аналогично  http://dev.mysql.com/doc/refman/5.5/en/tutorial.html
+
+выполнить простейшие запросы,
+
+Создать таблицу с именем pet и наполнить ее содержимым 
+
+CREATE TABLE IF NOT EXISTS `pet` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `owner` varchar(20) DEFAULT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `sex` char(1) DEFAULT NULL,
+  `birth` date DEFAULT NULL,
+  `death` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+INSERT INTO `pet` (`id`, `name`, `owner`, `species`, `sex`, `birth`, `death`) VALUES
+(NULL, 'Fluffy', 'Harold', 'cat', 'f', '1993-02-04', NULL),
+(NULL, 'Claws', 'Gwen', 'cat', 'm', '1994-03-17', NULL),
+(NULL, 'Buffy', 'Harold', 'dog', 'f', '1989-05-13', NULL),
+(NULL, 'Fang', 'Benny', 'dog', 'm', '1990-08-27', NULL),
+(NULL, 'Bowser', 'Diane', 'dog', 'm', '1979-08-31', '1995-07-29'),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL),
+(NULL, 'Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL),
+(NULL, 'Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL);
+
+и затем, аналогично выполнить все манипуляции с базой с представлением отчетов
+====================================================
+
+Перед названием каждого поля префикс в виде личного id (g00u00_name) 
+Добавить в таблицу поле с уникальным id, который  формируется автоматически  
+
+
+=========================================
+Самостоятельная работа №1
+Создание и модифицирование  простейших таблиц
+
+
+Создать на сервере в ~/public_html/mysql/g00u00_example_00.txt или public_html/mysql/g00u00_example_00.sql    файл с примерами запросов, позволяющими выполнять следующее:
+
+  - создание таблицы  (перед названием каждого поля префикс в виде личного id (g00u00_name) )  
+  - добавление данных в таблицу
+  - модифифицирование таблицы (id, первичный ключ)
+  - добавление новых  данных в модифицированную таблицу (очередная запись в таблицу)
+  - редактирование  данных в существующей таблице (замена записи в одном из полей)
+  - росмотр только задаваемых полей (2-4 поля из таблицы)
+  - фильтрование данные по одному из полей (на Ваше усмотрение)
+  - сортировать данные (что угодно)
+  - одновременно фильтровать и сортировать данные
+
+  Добавить поле для расчета возраста каждого объекта   и расчитать возраст для всех объектов
+  Добавить поля:
+     - количество объектов (случайное число до 5-ти) и
+     - цена объекта (случайное число до 50-ти)
+
+  Выполнить запросы
+   - на минимальную, максимальную и  среднюю цену по каждому объекту
+   - количество названий объектов (не обязательно)
+   - суммарное количество всех объектов
+   - суммарную  стоимость по каждому объекту
+   - количество объектов принадлежащих каждому из собственников
+   - стоимости объектов, принадлежащих каждому из собственников
+   - общую стоимость всех объектов.
+ 
+Всего 18 пунктов 
+=========================================
+
+
+Полезно
+
+cat > pet.sql
+
+CREATE TABLE IF NOT EXISTS `pet` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `owner` varchar(20) DEFAULT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `sex` char(1) DEFAULT NULL,
+  `birth` date DEFAULT NULL,
+  `death` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+INSERT INTO `pet` (`id`, `name`, `owner`, `species`, `sex`, `birth`, `death`) VALUES
+(NULL, 'Fluffy', 'Harold', 'cat', 'f', '1993-02-04', NULL),
+(NULL, 'Claws', 'Gwen', 'cat', 'm', '1994-03-17', NULL),
+(NULL, 'Buffy', 'Harold', 'dog', 'f', '1989-05-13', NULL),
+(NULL, 'Fang', 'Benny', 'dog', 'm', '1990-08-27', NULL),
+(NULL, 'Bowser', 'Diane', 'dog', 'm', '1979-08-31', '1995-07-29'),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL),
+(NULL, 'Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL),
+(NULL, 'Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL);
+
+
+
+
+
+============================
+Сохранение и восстановление данных
+
+Создание дампа одной базы
+mysqldump 'notroot'   -u'notroot' -p'notroot'> notroot.sql
+Создать дамп всех баз пользователя
+mysqldump --all-databases   -u'notroot' -p'notroot'> all_notroot.sql
+
+
+Удалить таблицу  и затем восстановить  из дампа
+mysql notroot  -u'notroot' -p'notroot' < notroot.sql
+
+

@@ -1,0 +1,166 @@
+#!/usr/bin/perl -w 
+# use strict;              # спасает от глупых ошибок
+use CGI::Carp qw (fatalsToBrowser);     # вывод ошибок к browser-у 
+use DBI;
+@m_dir=200;
+
+
+print "Content-type: text/html \n\n";
+print "<head>";
+print "<meta http-equiv='content-type' content='text/html'  charset='windows-1251'>";
+print "<title>Копирование из таблицы - в базу данных</title>";
+print "</head>";
+print "<body>";
+
+
+
+my $host = "mysql.1.metro07.z8.ru"; 
+my $port = "3306"; 
+my $db = "db_metro07_2"; # имя базы данных -
+my $user = "dbu_metro07_2"; 
+my $pass = "e*"; # пароль
+$dbh = DBI->connect("DBI:mysql:$db:$host:$port",$user,$pass)|| die $DBI::errstr;
+
+
+$dbh->do("
+DROP TABLE smtp 
+");
+$dbh->do("
+CREATE TABLE smtp (
+id INT(32) not null AUTO_INCREMENT, 
+name VARCHAR (512),  
+email VARCHAR (512), 
+email_mist VARCHAR (512), 
+PRIMARY KEY (id)
+)
+");
+
+
+$dbh->do("
+DROP TABLE smtp_t 
+");
+$dbh->do("
+CREATE TABLE smtp_t (
+id_t INT(32) not null AUTO_INCREMENT, 
+name_t VARCHAR (512),  
+email_t VARCHAR (512),  
+PRIMARY KEY (id_t)
+)
+");
+
+
+
+$id_file="../public_html/site_market/clients/clients.txt";	
+open (DFILE,$id_file) or die "mistake-$id_file_inform";
+$i_dir=0;
+while ($pri = <DFILE>)
+	{
+	($email,$name) =split(/\t/,$pri,3);
+#	print $name,"	",$email,"/n<br>";
+		my $name_t = $name="tmp";  
+		my $email_t = $email;
+  	
+		$dbh->do("
+		INSERT INTO `smtp_t` (
+		id_t, 
+		name_t,  
+		email_t
+		) 
+		VALUES (
+		NULL, 
+		'$name_t',  
+		'$email_t'  
+		)
+	");	
+	}
+close(DFILE);	
+
+	# готовим запрос
+	my $result = $dbh->prepare("
+	SELECT `id_t`,  COUNT(`email_t`)   as `sumemail_t`,	`email_t`    FROM `smtp_t`    GROUP BY `email_t`  /*HAVING COUNT(`email_t`) > 1*/
+	");
+	#  и выполняем его
+	$result->execute();
+	while (my $ln = $result->fetchrow_hashref()) 
+		{
+		print "
+			<br>
+			$ln->{'id_t'},
+			$ln->{'sumemail_t'},
+			$ln->{'email_t'}
+			
+			";
+		}
+    
+	print "<p>Выше - исходные данные после группировки с указанием кол-ва одинаковых,  в комментарии - дополнительные условия</p>";
+
+	my $result = $dbh->prepare("
+	INSERT INTO `smtp` (
+ # 		`id`, 
+			`name`, 
+			`email`
+		)		
+	SELECT 
+#			`id_t`,  
+			`name_t`, 
+			`email_t`    
+			 FROM `smtp_t`
+			GROUP BY `email_t`
+	");	
+	#  и выполняем его
+	$result->execute();
+
+
+
+	# готовим запрос
+	my $result = $dbh->prepare("
+	SELECT *   FROM `smtp`
+	");
+	#  и выполняем его
+	$result->execute();
+	while (my $ln = $result->fetchrow_hashref()) 
+		{
+		print "
+			<br>
+			$ln->{'id'},
+			$ln->{'name'},
+			$ln->{'email'},
+			$ln->{'email_mist'}
+
+			";	
+		}
+=pod
+	my $result = $dbh->prepare("
+	SELECT *   FROM `smtp`
+	");
+	#  и выполняем его
+	$result->execute();
+	while (my $ln = $result->fetchrow_hashref()) 
+		{
+		print "
+			<br>
+			$ln->{'id'},
+			$ln->{'name'},
+			$ln->{'email'}
+			";	
+		}
+=cut
+	my $result = $dbh->prepare("
+	SELECT COUNT(*) AS `raw_count` FROM `smtp` 
+	");
+	#  и выполняем его
+	$result->execute();
+	while (my $ln = $result->fetchrow_hashref()) 
+		{
+		print "
+			<p><br>
+			$ln->{'raw_count'}  
+			- количество не повторяющихся записей</p>
+			";	
+		}
+
+#$rc = $sth->finish;    # закрываем
+$rc = $dbh->disconnect;  # соединение
+
+print "</body>"; 
+print "</html>"; 

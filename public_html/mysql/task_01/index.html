@@ -1,0 +1,68 @@
+<html>
+
+<head>
+    <style>
+        h3 {
+            font-size: 100%;
+            font-weight: bold;
+        }
+        
+        p {
+            font-size: 100%;
+            color: black;
+            font-weight: lighter;
+            font-style: normal;
+            font-family: Cambria;
+        }
+        
+        a {
+            color: rgb(194, 141, 141);
+        }
+    </style>
+</head>
+
+<body>
+    <h3 class='h3'>Содержание задания 1:
+        <ul>
+            <li><a href="#000">000_Creating_a_Table</a></li>
+            <li><a href="#001">000_Creating_a_Table_tmp</a></li>
+        </ul>
+    </h3>
+
+    <!--<form action="http://g06u29.nn2000.info/cgi-bin/form_action_file.py" method='get' target='_self'>-->
+    <form action="http://g06u29.nn2000.info/cgi-bin/form_action_db_report.py" method='get' target='_self'>
+        <p>Фамилия: <input type="Text" name="last_name" value="Иванов" size=8> Имя: <input type="Text" name="name" value="Петр" size=8> Идентификатор: <input type="Radio" name="group" value="g06u29" checked>g06u29</p>
+
+        <h3 id="000">000_Creating_a_Table_01</h3>
+        <p>Создать таблицу с добавление двух полей различного типа
+            <br>
+            <a href="../../../img/001.png" target="_new"><img src="../../../img/001.png" height="50" width="100"></a>
+            <br>Оценивание, баллов:<input type="Text" name="v_01" value="1" size=1>
+        </p>
+
+        <h3 id="001">000_Creating_a_Table_02</h3>
+        <p>Создать таблицу с добавление двух полей различного типа
+            <br>
+            <a href="../../../img/001.png" target="_new"><img src="../../../img/001.png" height="50" width="100"></a>
+            <br>Оценивание, баллов:<input type="Text" name="v_01" value="3" size=1>
+        </p>
+
+        <!--Все нижерасположенные фрагменты перемещать нельзя, редактировать можно-->
+        <br> Название файла: <input type="Техт" name="000_file_name" value="g06u29.txt">
+        <br>Тип записи в файл:
+        <select name="010_mode">
+            <OPTION value="a">a - дозаписать в файл</OPTION> 
+            <OPTION value="w">w - очисить файл и записать в файл</OPTION> 
+        </select>
+        </font>
+        </p>
+        <input type="hidden" name="function" value="page">
+        <input type="hidden" name="page_id" value="3">
+        <p>
+            <input type="Reset" name="Reset" value="Обновить">
+            <input type="Submit" name="submit" value="Отправить">
+        </p>
+    </form>
+</body>
+
+</html>

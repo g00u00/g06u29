@@ -1,0 +1,5 @@
+Field	Type	Null	Key	Default	Extra
+my_name	char(20)	YES	MUL	123	
+my_age	int(10) unsigned	YES		100	
+my_name	my_age
+Иван	2

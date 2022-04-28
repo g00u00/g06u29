@@ -1,0 +1,50 @@
+mysql -u'root' -p'notroot'
+help
+
+DROP DATABASE IF EXISTS u;
+CREATE DATABASE IF NOT EXISTS  u COLLATE utf8_general_ci;
+SHOW DATABASES;
+DROP DATABASE IF EXISTS u;
+
+CREATE USER 'u'@'localhost' IDENTIFIED BY 'my_passwd';
+DROP USER 'u'@'localhost';
+SET PASSWORD =PASSWORD('new_passwd');
+
+SET PASSWORD FOR 'u'@'localhost' = PASSWORD('12345');
+SELECT user,password FROM mysql.user;
+
+
+GRANT ALL ON u.* TO 'u'@'localhost';
+
+
+
+
+SHOW DATABASES;
+use g01u00
+SHOW TABLES;
+DESCRIBE table_01;
+desc
+
+
+Аналогично http://dev.mysql.com/doc/refman/5.5/en/creating-tables.html
+или используя phpadmin
+cоздать таблицу students  с полями
+id(AUTO_INCREMENT),  группа, фамилия, имя, отчество, год рождения, время и дату создания записи
+
+
+
+
+Cоздать 4 записи и обязательно 2 группы
+Просмотреть содержание таблицы
+
+Создать дамп таблицы
+mysqldump g'01u00'   -u'g01u00' -p'g01u00'> g01u00.sql
+mysqldump --all-databases   -u'notroot' -p'notroot'> all_databases.sql
+
+Посмотреть содержание дампа
+
+
+Удалить базу и восстановить базу из дампа
+mysql notroot  -u<логин> -p<пароль> < notroot.sql
+
+

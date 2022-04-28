@@ -1,0 +1,6 @@
+[InternetShortcut]
+URL=https://gist.github.com/bradtraversy/c831baaad44343cc945e76c2e30927b3
+IDList=
+HotKey=0
+IconFile=C:\Users\mvv\AppData\Local\Mozilla\Firefox\Profiles\xf67te27.default-release\shortcutCache\XdHWQo_viCvB+YfFd7tGSA==.ico
+IconIndex=0

@@ -1,0 +1,152 @@
+#\. /var/www/marshirov/data/nn2000.info/public_html/site/www/comments/current/11bi_el-business/i/notroot_example_00.sql.txt
+
+
+
+USE notroot;
+SELECT NOW();
+
+SELECT 'Удаление таббиц типа pet';
+DROP TABLE IF EXISTS notroot_pet;
+DROP TABLE IF EXISTS notroot_pet_01;
+DROP TABLE IF EXISTS notroot_pet_02;
+SHOW TABLES;
+
+
+SELECT 'Создание новой таблицы';
+DROP TABLE IF EXISTS notroot_pet;
+CREATE TABLE IF NOT EXISTS notroot_pet 
+(notroot_name VARCHAR(20), 
+notroot_owner VARCHAR(20), 
+notroot_species VARCHAR(20), 
+notroot_sex  SET('m','f'), 
+notroot_birth DATE, 
+notroot_death DATE) 
+DEFAULT CHARACTER SET = utf8, 
+DEFAULT COLLATE = utf8_general_ci; 
+SHOW TABLES;
+DESCRIBE notroot_pet;
+
+SELECT 'Очередная запись в таблицу и удаление содержания  всей таблицы';
+INSERT INTO notroot_pet VALUES ('Puffball','Diane','hamster','f','1999-03-30',NULL);
+SELECT * FROM notroot_pet;
+
+DELETE FROM notroot_pet;
+SELECT * FROM notroot_pet;
+
+
+SELECT "Создать структуру новой таблицы на основе уже существующей таблицы двумя способами";
+CREATE TABLE IF NOT EXISTS notroot_pet_01 
+SELECT notroot_name, notroot_birth
+FROM notroot_pet;
+DESCRIBE notroot_pet_01;
+
+CREATE TABLE IF NOT EXISTS notroot_pet_02 
+LIKE notroot_pet;
+DESCRIBE notroot_pet_02;
+
+
+
+
+SELECT "Модифицирование структуры таблицы";
+ALTER TABLE `notroot_pet` ADD `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ;
+ALTER TABLE `notroot_pet` ADD `inserted_date_time`  TIMESTAMP AFTER notroot_death ;
+ALTER TABLE `notroot_pet` DROP `notroot_owner` ;
+
+DESCRIBE notroot_pet;
+
+INSERT INTO notroot_pet (notroot_name) VALUES ('новое имя');
+SELECT * FROM notroot_pet;
+
+
+select 'Создание совершенно новой таблицы';
+DROP TABLE IF EXISTS notroot_pet;
+CREATE TABLE IF NOT EXISTS notroot_pet 
+(id INT AUTO_INCREMENT  NOT NULL,
+notroot_name LONGTEXT, 
+notroot_owner VARCHAR(20), 
+notroot_species VARCHAR(20), 
+notroot_sex  SET('m','f'), 
+notroot_birth DATE, 
+notroot_death DATE,
+inserted_date_time TIMESTAMP,
+PRIMARY KEY (id)
+) 
+DEFAULT CHARACTER SET = utf8, 
+DEFAULT COLLATE = utf8_general_ci; 
+DESCRIBE notroot_pet;
+
+select 'Варианты записи в новую таблицу';
+INSERT INTO `notroot_pet` VALUES
+(NULL, 'Fluffy', 'Harold', 'cat', 'f', '1993-02-04', NULL, NULL),
+(NULL, 'Claws', 'Gwen', 'cat', 'm', '1994-03-17', NULL, NULL),
+(NULL, 'Buffy', 'Harold', 'dog', 'f', '1989-05-13', NULL, NULL),
+(NULL, 'Fang', 'Benny', 'dog', 'm', '1990-08-27', NULL, NULL),
+(NULL, 'Bowser', 'Diane', 'dog', 'm', '1979-08-31', '1995-07-29', NULL),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL, NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL, NULL),
+(NULL, 'Slim', 'Benny', 'snake', 'm', '1996-04-29', NULL, NULL),
+(NULL, 'Chirpy', 'Gwen', 'bird', 'f', '1998-09-11', NULL, NULL),
+(NULL, 'Whistler', 'Gwen', 'bird', NULL, '1997-12-09', NULL, NULL);
+
+SELECT * FROM notroot_pet;
+
+INSERT INTO `notroot`.`notroot_pet` ( `notroot_name`) VALUES ('Только имя. Остальное по-умолчанию');
+
+SELECT * FROM notroot_pet;
+
+SELECT * FROM notroot_pet
+where notroot_owner = 'Benny';
+
+UPDATE  notroot_pet
+    SET notroot_owner='Иван'
+    WHERE notroot_owner = 'Benny';
+
+SELECT * FROM notroot_pet;
+
+
+
+SELECT 'Расчет продолжительности жизни';
+ALTER TABLE `notroot_pet` ADD `age` INT 	AFTER `notroot_death`; 
+UPDATE  notroot_pet   SET age=TIMESTAMPDIFF(YEAR,notroot_birth,notroot_death);
+UPDATE  notroot_pet   SET age=TIMESTAMPDIFF(YEAR,notroot_birth,CURDATE())
+WHERE  `notroot_death` is NULL;
+SELECT * FROM notroot_pet;
+
+SELECT 'Вероятностное задание количества ';
+ALTER TABLE `notroot_pet` ADD `amount` INT 	AFTER `notroot_owner`; 
+UPDATE  notroot_pet   SET `amount`= (RAND() * 5);
+SELECT * FROM notroot_pet;
+
+
+SELECT 'Вероятностное задание цен ';
+ALTER TABLE `notroot_pet` ADD `price` INT 	AFTER `amount`; 
+UPDATE  notroot_pet   SET `price`= (RAND() * 20);
+SELECT * FROM notroot_pet;
+
+SELECT 'Количество объектов с одинаковыми имени'
+SELECT COUNT(`notroot_name`) FROM `notroot_pet`;
+
+SELECT 'Суммарное  количество объектов'
+SELECT SUM(`amount`) FROM `notroot_pet`;
+
+SELECT 'Средняя цена';
+SELECT AVG(`price`) FROM `notroot_pet`;
+
+
+
+SELECT 'Стоимости по каждому объекту';
+SELECT `notroot_owner`, `notroot_name`, `amount`,`price`,  (`amount`*`price`) AS `cost`   FROM `notroot_pet`;
+
+
+
+SELECT 'Количество у каждого из собственников';
+SELECT `notroot_owner`, SUM(`amount`) FROM `notroot_pet`
+GROUP BY `notroot_owner`;
+
+SELECT 'Стоимости у каждого из вобственников';
+SELECT `notroot_owner`,  (SUM(`amount`*`price`)) AS `cost`   FROM `notroot_pet`
+GROUP BY `notroot_owner`;
+
+
+
+;
